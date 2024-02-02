@@ -16,6 +16,12 @@ export class InMemoryPackagesRepository implements IPackageRepository {
 		this.items[packageIndex] = _package;
 	}
 
+	async findById(packageId: string): Promise<Package | null> {
+		const packageIndex = this.items.findIndex((item) => item.id.toString() === packageId);
+
+		return this.items[packageIndex];
+	}
+
 	async findManyByDeliverymanId(deliverymanId: string): Promise<Package[]> {
 		const packages = this.items.filter((_package) => _package.deliverymanId?.toString() === deliverymanId);
 

@@ -2,19 +2,19 @@ import { Entity } from '@/core/entities/entity';
 import { Optional } from '@/core/types/optionals';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 
-export enum PackageStatus {
-	waiting = 'waiting',
-	delivered = 'delivered',
-	returned = 'returned',
-	dispatched = 'dispatched',
+export enum EPackageStatus {
+	waiting,
+	delivered,
+	returned,
+	dispatched,
 }
 
-export type EPackageStatus = keyof typeof PackageStatus;
+export type TPackageStatus = keyof typeof EPackageStatus;
 
 export interface IPackageProps {
 	deliverymanId?: UniqueEntityId | null;
 	recipientId: UniqueEntityId;
-	status: EPackageStatus;
+	status: TPackageStatus;
 	postedAt: Date;
 	updatedAt?: Date | null;
 }
@@ -32,7 +32,7 @@ export class Package extends Entity<IPackageProps> {
 		return this.props.status;
 	}
 
-	set status(status: EPackageStatus) {
+	set status(status: TPackageStatus) {
 		this.props.status = status;
 		this.touch();
 	}

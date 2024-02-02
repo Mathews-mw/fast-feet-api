@@ -34,7 +34,7 @@ describe('Create Recipient Use Case', () => {
 		});
 	});
 
-	it('Should be able to create the same recipient twice', async () => {
+	it('Not should be able to create the same recipient twice', async () => {
 		const recipient = makeRecipient({ cpf: '02288899977' });
 
 		recipientsRepository.items.push(recipient);

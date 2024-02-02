@@ -9,12 +9,12 @@ interface CreateRecipientRequest {
 	name: string;
 	email: string;
 	cpf: string;
-	rua: string;
-	numero: string;
-	complemento?: string;
-	bairro: string;
-	cidade: string;
-	estado: string;
+	street: string;
+	number: string;
+	complement?: string;
+	district: string;
+	city: string;
+	state: string;
 	cep: string;
 }
 
@@ -29,7 +29,7 @@ type EResponse = Outcome<
 export class CreateRecipientUseCase {
 	constructor(private recipientsRepository: IRecipientRepository) {}
 
-	async execute({ name, email, cpf, rua, numero, complemento, bairro, cidade, estado, cep }: CreateRecipientRequest): Promise<EResponse> {
+	async execute({ name, email, cpf, street, number, complement, district, city, state, cep }: CreateRecipientRequest): Promise<EResponse> {
 		const recipientWithSameCpf = await this.recipientsRepository.findByCpf(cpf);
 
 		if (recipientWithSameCpf) {
@@ -40,12 +40,12 @@ export class CreateRecipientUseCase {
 			name,
 			email,
 			cpf,
-			rua,
-			numero,
-			complemento,
-			bairro,
-			cidade,
-			estado,
+			street,
+			number,
+			complement,
+			district,
+			city,
+			state,
 			cep,
 		});
 

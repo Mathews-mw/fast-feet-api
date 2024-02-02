@@ -6,12 +6,12 @@ export interface IRecipientProps {
 	name: string;
 	email: string;
 	cpf: string;
-	rua: string;
-	numero: string;
-	complemento?: string;
-	bairro: string;
-	cidade: string;
-	estado: string;
+	street: string;
+	number: string;
+	complement?: string;
+	district: string;
+	city: string;
+	state: string;
 	cep: string;
 }
 
@@ -28,35 +28,35 @@ export class Recipient extends Entity<IRecipientProps> {
 		return this.props.cpf;
 	}
 
-	get rua() {
-		return this.props.rua;
+	get street() {
+		return this.props.street;
 	}
 
-	get numero() {
-		return this.props.numero;
+	get number() {
+		return this.props.number;
 	}
 
-	get complemento() {
-		return this.props.complemento;
+	get complement() {
+		return this.props.complement;
 	}
 
-	get bairro() {
-		return this.props.bairro;
+	get district() {
+		return this.props.district;
 	}
 
-	get cidade() {
-		return this.props.cidade;
+	get city() {
+		return this.props.city;
 	}
 
-	get estado() {
-		return this.props.estado;
+	get state() {
+		return this.props.state;
 	}
 
 	get cep() {
 		return this.props.cep;
 	}
 
-	static create(props: Optional<IRecipientProps, 'complemento'>, id?: UniqueEntityId) {
+	static create(props: Optional<IRecipientProps, 'complement'>, id?: UniqueEntityId) {
 		const deliveryman = new Recipient(props, id);
 
 		return deliveryman;
