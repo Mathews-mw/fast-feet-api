@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DELIVERY_MAN
+}
+
+model User {
+  id        String    @id @unique @default(uuid())
+  name      String
+  email     String    @unique
+  cpf       String    @unique
+  password  String
+  role      Role      @default(DELIVERY_MAN)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+
+  session Session?
+  tokens  Token[]
+  orders  Order[]
+
+  @@map("users")
+}
+
+model Session {
+  id         String   @id @unique @default(uuid())
+  userId     String   @unique @map("user_id")
+  token      String   @map("token")
+  expiresAt  DateTime @map("expires_at")
+  registerAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+enum TokenType {
+  PASSWORD_RECOVER
+  PASSWORD_RESET
+}
+
+model Token {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  type      TokenType
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@map("tokens")
+}
+
+enum OrderStatus {
+  POSTADO
+  EM_PREPARO
+  ROTA_ENTREGA
+  ENTREGUE
+  DEVOLVIDO
+  AUSENTE
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  recipientId     String      @map("recipient_id")
+  ownerId         String?     @map("owner_id")
+  status          OrderStatus @default(POSTADO)
+  postedAt        DateTime    @default(now()) @map("posted_at")
+  withdrawalAt    DateTime    @map("withdrawal_at")
+  deliveryAt      DateTime    @map("delivery_at")
+  statusUpdatedAt DateTime    @map("status_updated_at")
+
+  user      User?     @relation(fields: [ownerId], references: [id], onUpdate: Cascade)
+  recipient Recipient @relation(fields: [recipientId], references: [id], onUpdate: Cascade)
+
+  @@map("orders")
+}
+
+model Recipient {
+  id         String  @id @default(uuid())
+  name       String
+  email      String
+  phone      String
+  cpf        String
+  cep        String
+  street     String
+  number     String
+  complement String?
+  district   String
+  city       String
+  state      String
+
+  orders Order[]
+
+  @@map("recipients")
+}
