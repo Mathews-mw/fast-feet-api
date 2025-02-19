@@ -6,6 +6,6 @@ export interface IOrderRepository {
 	delete(order: Order): Promise<void>;
 	findMany(): Promise<Order[]>;
 	findManyByOwnerId(ownerId: string): Promise<Order[]>;
+	findManyByRecipientId(recipientId: string): Promise<Order[]>;
 	findById(id: string): Promise<Order | null>;
-	findByRecipientId(recipientId: string): Promise<Order | null>;
 }

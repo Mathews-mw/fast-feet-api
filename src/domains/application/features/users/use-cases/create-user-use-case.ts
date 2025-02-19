@@ -24,10 +24,15 @@ export class CreateUserUseCase {
 	constructor(@inject(containerKeysConfig.repositories.users_repository) private usersRepository: IUserRepository) {}
 
 	async execute({ name, email, cpf, password, role }: IRequest): Promise<Response> {
-		const user = await this.usersRepository.findByEmail(email);
+		const userWithSameEmail = await this.usersRepository.findByEmail(email);
+		const userWithSameCpf = await this.usersRepository.findByCpf(cpf);
 
-		if (user) {
+		if (userWithSameEmail) {
 			return failure(new BadRequestError('User with same e-mail already exists'));
+		}
+
+		if (userWithSameCpf) {
+			return failure(new BadRequestError('User with same CPF already exists'));
 		}
 
 		const hashPassword = await hash(password, cryptographyConfig.HASH_SALT_LENGTH);

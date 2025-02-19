@@ -20,6 +20,8 @@ export type CreateUserResponse = z.infer<typeof responseSchema>;
 
 export const createUserSchema: FastifySchema = {
 	tags: ['Users'],
+	summary: 'Create a new user',
+	security: [{ bearerAuth: [] }],
 	body: bodySchema,
 	response: {
 		201: responseSchema,

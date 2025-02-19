@@ -59,6 +59,7 @@ model Token {
 
 enum OrderStatus {
   POSTADO
+  DISPONIVEL_RETIRADA
   EM_PREPARO
   ROTA_ENTREGA
   ENTREGUE
@@ -72,12 +73,14 @@ model Order {
   ownerId         String?     @map("owner_id")
   status          OrderStatus @default(POSTADO)
   postedAt        DateTime    @default(now()) @map("posted_at")
-  withdrawalAt    DateTime    @map("withdrawal_at")
-  deliveryAt      DateTime    @map("delivery_at")
-  statusUpdatedAt DateTime    @map("status_updated_at")
+  withdrawalAt    DateTime?   @map("withdrawal_at")
+  deliveryAt      DateTime?   @map("delivery_at")
+  statusUpdatedAt DateTime?   @map("status_updated_at")
 
   user      User?     @relation(fields: [ownerId], references: [id], onUpdate: Cascade)
   recipient Recipient @relation(fields: [recipientId], references: [id], onUpdate: Cascade)
+
+  attachments Attachment[]
 
   @@map("orders")
 }
@@ -99,4 +102,15 @@ model Recipient {
   orders Order[]
 
   @@map("recipients")
+}
+
+model Attachment {
+  id      String  @id @default(uuid())
+  title   String  @unique
+  url     String
+  orderId String? @unique @map("order_id")
+
+  order Order? @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@map("attachments")
 }

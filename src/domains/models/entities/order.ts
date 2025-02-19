@@ -6,6 +6,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 
 export const orderStatusSchema = z.union([
 	z.literal('POSTADO'),
+	z.literal('DISPONIVEL_RETIRADA'),
 	z.literal('EM_PREPARO'),
 	z.literal('ROTA_ENTREGA'),
 	z.literal('ENTREGUE'),

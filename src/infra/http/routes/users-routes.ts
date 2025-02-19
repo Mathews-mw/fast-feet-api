@@ -6,6 +6,7 @@ import { createUserSchema } from '../schemas/create-user-schema';
 import { verifyUserPermissions } from '../middlewares/permission-middleware';
 import { createUserController } from '../controllers/users/create-user-controller';
 import { getUserProfileController } from '../controllers/users/get-user-profile-controller';
+import { getUserProfileSchema } from '../schemas/get-user-profile-schema';
 
 export async function usersRoutes(app: FastifyInstance) {
 	app
@@ -20,5 +21,8 @@ export async function usersRoutes(app: FastifyInstance) {
 			createUserController
 		);
 
-	app.withTypeProvider<ZodTypeProvider>().register(authMiddleware).get('/me', getUserProfileController);
+	app
+		.withTypeProvider<ZodTypeProvider>()
+		.register(authMiddleware)
+		.get('/me', { schema: getUserProfileSchema }, getUserProfileController);
 }

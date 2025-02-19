@@ -5,6 +5,7 @@ import fastify from 'fastify';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCors from '@fastify/cors';
 import fastifySwagger from '@fastify/swagger';
+import fastifyMultipart from '@fastify/multipart';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import {
 	jsonSchemaTransform,
@@ -21,6 +22,8 @@ export const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);
+
+app.register(fastifyMultipart, { attachFieldsToBody: true });
 
 app.setErrorHandler(errorHandler);
 

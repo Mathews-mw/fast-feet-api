@@ -15,6 +15,7 @@ export type AuthenticateUserResponse = z.infer<typeof responseSchema>;
 
 export const authenticateUserSchema: FastifySchema = {
 	tags: ['Auth'],
+	summary: 'Authenticate with e-mail and password (JWT)',
 	body: bodySchema,
 	response: {
 		200: responseSchema,
