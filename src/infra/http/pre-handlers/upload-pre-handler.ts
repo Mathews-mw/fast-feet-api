@@ -4,12 +4,18 @@ import { cwd } from 'node:process';
 import { FastifyRequest } from 'fastify';
 import type { MultipartFile } from '@fastify/multipart';
 
+import { BadRequestError } from '@/core/errors/bad-request-errors';
+
 interface IBodyRequest {
 	file: MultipartFile;
 }
 
 export async function uploadPreHandler(request: FastifyRequest) {
-	const bodyData = (await request.body) as IBodyRequest;
+	const bodyData = (await request.body) as IBodyRequest | undefined;
+
+	if (!bodyData) {
+		throw new BadRequestError('Please, provide a file');
+	}
 	const file = bodyData.file;
 
 	try {

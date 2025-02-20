@@ -9,6 +9,7 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error';
 
 interface IRequest {
 	orderId: string;
+	ownerId: string;
 }
 
 type Response = Outcome<BadRequestError, { order: Order }>;
@@ -17,11 +18,19 @@ type Response = Outcome<BadRequestError, { order: Order }>;
 export class OrderDeliveredUseCase {
 	constructor(@inject(containerKeysConfig.repositories.orders_repository) private ordersRepository: IOrderRepository) {}
 
-	async execute({ orderId }: IRequest): Promise<Response> {
+	async execute({ orderId, ownerId }: IRequest): Promise<Response> {
 		const order = await this.ordersRepository.findById(orderId);
 
 		if (!order) {
 			return failure(new ResourceNotFoundError('Order not found'));
+		}
+
+		if (order.ownerId == null) {
+			return failure(new BadRequestError(`You can't delivery order that have no owner.`));
+		}
+
+		if (order.ownerId.toString() !== ownerId) {
+			return failure(new BadRequestError(`This order belongs to another delivery man. You can't delivery it.`));
 		}
 
 		order.status = 'ENTREGUE';

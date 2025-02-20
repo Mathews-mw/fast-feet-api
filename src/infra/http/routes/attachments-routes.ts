@@ -6,7 +6,7 @@ import { createOrderSchema } from '../schemas/create-order-schema';
 import { verifyUserPermissions } from '../middlewares/permission-middleware';
 import { createOrderController } from '../controllers/orders/create-order-controller';
 import { orderDeliveredController } from '../controllers/orders/order-delivered-controller';
-import { uploadPreHandler } from '../pre-handlers/upload-pre-hendler';
+import { uploadPreHandler } from '../pre-handlers/upload-pre-handler';
 
 export async function ordersRoutes(app: FastifyInstance) {
 	app

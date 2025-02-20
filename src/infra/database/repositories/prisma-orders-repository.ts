@@ -1,7 +1,12 @@
 import { prisma } from '../prisma';
 import { OrderMapper } from './mappers/order-mapper';
 import { Order } from '@/domains/models/entities/order';
-import { IOrderRepository } from '@/domains/application/features/orders/repositories/i-order-repository';
+import {
+	IFindManyBuOwnerIdQuerySearch,
+	IFindManyBuOwnerIdResponse,
+	IOrderRepository,
+} from '@/domains/application/features/orders/repositories/i-order-repository';
+import { Prisma } from '@prisma/client';
 
 export class PrismaOrdersRepository implements IOrderRepository {
 	async create(order: Order): Promise<Order> {
@@ -39,14 +44,29 @@ export class PrismaOrdersRepository implements IOrderRepository {
 		return orders.map(OrderMapper.toDomain);
 	}
 
-	async findManyByOwnerId(ownerId: string): Promise<Order[]> {
-		const orders = await prisma.order.findMany({
+	async findManyByOwnerId({ ownerId, status }: IFindManyBuOwnerIdQuerySearch): Promise<IFindManyBuOwnerIdResponse> {
+		const query: Prisma.OrderFindManyArgs = {
 			where: {
 				ownerId,
+				status,
 			},
-		});
+		};
 
-		return orders.map(OrderMapper.toDomain);
+		const [orders, amount] = await prisma.$transaction([
+			prisma.order.findMany({
+				where: query.where,
+			}),
+			prisma.order.count({
+				where: query.where,
+			}),
+		]);
+
+		const response = {
+			amount,
+			orders: orders.map(OrderMapper.toDomain),
+		};
+
+		return response;
 	}
 
 	async findManyByRecipientId(recipientId: string): Promise<Order[]> {
