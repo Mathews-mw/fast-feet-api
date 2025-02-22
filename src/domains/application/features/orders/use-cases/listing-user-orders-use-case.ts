@@ -1,17 +1,18 @@
 import { inject, injectable } from 'tsyringe';
 
 import { Outcome, success } from '@/core/outcome';
+import { OrderStatus } from '@/domains/models/entities/order';
 import containerKeysConfig from '@/config/container-keys-config';
 import { BadRequestError } from '@/core/errors/bad-request-errors';
-import { Order, OrderStatus } from '@/domains/models/entities/order';
 import { IOrderRepository } from '../repositories/i-order-repository';
+import { OrderDetails } from '@/domains/models/entities/value-objects/order-details';
 
 interface IRequest {
 	ownerId: string;
 	status?: OrderStatus;
 }
 
-type Response = Outcome<BadRequestError, { amount: number; orders: Order[] }>;
+type Response = Outcome<BadRequestError, { amount: number; orders: OrderDetails[] }>;
 
 @injectable()
 export class ListingUserOrdersUseCase {

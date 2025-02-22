@@ -9,6 +9,7 @@ export const envSchema = z.object({
 	HOST: z.string(),
 	DATABASE_URL: z.string(),
 	JWT_SECRET: z.string(),
+	GOOGLE_MAPS_API_KEY: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

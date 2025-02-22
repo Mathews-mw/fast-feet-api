@@ -1,4 +1,5 @@
 import { Order, OrderStatus } from '@/domains/models/entities/order';
+import { OrderDetails } from '@/domains/models/entities/value-objects/order-details';
 
 export interface IFindManyBuOwnerIdQuerySearch {
 	ownerId: string;
@@ -7,7 +8,7 @@ export interface IFindManyBuOwnerIdQuerySearch {
 
 export interface IFindManyBuOwnerIdResponse {
 	amount: number;
-	orders: Array<Order>;
+	orders: Array<OrderDetails>;
 }
 
 export interface IOrderRepository {
@@ -18,4 +19,5 @@ export interface IOrderRepository {
 	findManyByOwnerId(query: IFindManyBuOwnerIdQuerySearch): Promise<IFindManyBuOwnerIdResponse>;
 	findManyByRecipientId(recipientId: string): Promise<Order[]>;
 	findById(id: string): Promise<Order | null>;
+	findWithDetails(id: string): Promise<OrderDetails | null>;
 }

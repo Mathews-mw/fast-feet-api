@@ -5,6 +5,12 @@ const paramsSchema = z.object({
 	orderId: z.string().uuid(),
 });
 
+const querySchema = z.object({
+	lat: z.coerce.number(),
+	long: z.coerce.number(),
+});
+
+export type OrderDeliveredQuery = z.infer<typeof querySchema>;
 export type OrderDeliveredParams = z.infer<typeof paramsSchema>;
 
 export const orderDeliveredSchema: FastifySchema = {
@@ -13,7 +19,10 @@ export const orderDeliveredSchema: FastifySchema = {
 	description: 'This route require to upload an image',
 	security: [{ bearerAuth: [] }],
 	params: paramsSchema,
+	querystring: querySchema,
 	response: {
-		204: z.null(),
+		200: z.object({
+			message: z.string().default('Order delivered successfully'),
+		}),
 	},
 };

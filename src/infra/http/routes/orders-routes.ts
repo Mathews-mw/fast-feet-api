@@ -8,12 +8,14 @@ import { uploadPreHandler } from '../pre-handlers/upload-pre-handler';
 import { orderDeliveredSchema } from '../schemas/order-delivered-schema';
 import { verifyUserPermissions } from '../middlewares/permission-middleware';
 import { updateOrderStatusSchema } from '../schemas/update-order-status-schema';
+import { listingUserOrdersSchema } from '../schemas/listing-user-orders-schema';
 import { createOrderController } from '../controllers/orders/create-order-controller';
+import { pickupOrderController } from '../controllers/orders/pickup-order-controller';
 import { orderDeliveredController } from '../controllers/orders/order-delivered-controller';
 import { updateOrderStatusController } from '../controllers/orders/update-order-status-controller';
-import { pickupOrderController } from '../controllers/orders/pickup-order-controller';
-import { listingUserOrdersSchema } from '../schemas/listing-user-orders-schema';
-import { listingUserOrdersController } from '../controllers/orders/listing-user-oders-controller';
+import { listingUserOrdersController } from '../controllers/orders/listing-user-orders-controller';
+import { listingOrderNearbyUserSchema } from '../schemas/listing-orders-nearby-user-location-schema';
+import { listingOrdersNearbyUserLocationController } from '../controllers/orders/listing-orders-nearby-user-location-controller';
 
 export async function ordersRoutes(app: FastifyInstance) {
 	app
@@ -74,5 +76,17 @@ export async function ordersRoutes(app: FastifyInstance) {
 				schema: listingUserOrdersSchema,
 			},
 			listingUserOrdersController
+		);
+
+	app
+		.withTypeProvider<ZodTypeProvider>()
+		.register(authMiddleware)
+		.get(
+			'/user/nearby',
+			{
+				preHandler: [verifyUserPermissions('Order', 'read')],
+				schema: listingOrderNearbyUserSchema,
+			},
+			listingOrdersNearbyUserLocationController
 		);
 }

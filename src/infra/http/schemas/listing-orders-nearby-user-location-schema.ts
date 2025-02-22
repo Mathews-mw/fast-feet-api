@@ -4,6 +4,9 @@ import { orderStatusSchema } from '@/domains/models/entities/order';
 
 const querySchema = z.object({
 	status: z.optional(orderStatusSchema),
+	lat: z.coerce.number(),
+	long: z.coerce.number(),
+	distanceInKm: z.optional(z.coerce.number()).default(5),
 });
 
 const responseSchema = z.object({
@@ -37,12 +40,14 @@ const responseSchema = z.object({
 	),
 });
 
-export type ListingUserOrdersQuery = z.infer<typeof querySchema>;
-export type ListingUserOrdersResponse = z.infer<typeof responseSchema>;
+export type ListingOrderNearbyUserLocationQuery = z.infer<typeof querySchema>;
+export type ListingOrderNearbyUserLocationResponse = z.infer<typeof responseSchema>;
 
-export const listingUserOrdersSchema: FastifySchema = {
+export const listingOrderNearbyUserSchema: FastifySchema = {
 	tags: ['Orders'],
-	summary: 'Listing user orders',
+	summary: 'Listing orders nearby user location',
+	description:
+		'This route require the a user location (**latitude** and **longitude**) to calculate nearby orders. Use the parameter `distanceInKm` to specify the desired distance to be calculated. For example, if `distanceInKm` equals 3, then all the orders in a radius of 3km will be returned.',
 	security: [{ bearerAuth: [] }],
 	querystring: querySchema,
 	response: {

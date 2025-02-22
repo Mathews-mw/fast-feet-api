@@ -98,6 +98,8 @@ model Recipient {
   district   String
   city       String
   state      String
+  latitude   Float
+  longitude  Float
 
   orders Order[]
 

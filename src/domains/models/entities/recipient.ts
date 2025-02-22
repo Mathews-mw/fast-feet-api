@@ -14,6 +14,8 @@ export interface IRecipientProps {
 	district: string;
 	city: string;
 	state: string;
+	latitude: number;
+	longitude: number;
 }
 
 export class Recipient extends Entity<IRecipientProps> {
@@ -103,6 +105,22 @@ export class Recipient extends Entity<IRecipientProps> {
 
 	set state(state: string) {
 		this.props.state = state;
+	}
+
+	get latitude() {
+		return this.props.latitude;
+	}
+
+	set latitude(latitude: number) {
+		this.props.latitude = latitude;
+	}
+
+	get longitude() {
+		return this.props.longitude;
+	}
+
+	set longitude(longitude: number) {
+		this.props.longitude = longitude;
 	}
 
 	static create(props: Optional<IRecipientProps, 'complement'>, id?: UniqueEntityId) {

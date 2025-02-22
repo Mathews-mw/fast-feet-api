@@ -17,6 +17,8 @@ export class RecipientMapper {
 				district: data.district,
 				city: data.city,
 				state: data.state,
+				latitude: data.latitude,
+				longitude: data.longitude,
 			},
 			new UniqueEntityId(data.id)
 		);
@@ -36,6 +38,8 @@ export class RecipientMapper {
 			district: data.district,
 			city: data.city,
 			state: data.state,
+			latitude: data.latitude,
+			longitude: data.longitude,
 		};
 	}
 }

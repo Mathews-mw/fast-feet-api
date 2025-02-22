@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { OrderPresenter } from '../../presenters/orders-presenter';
+import { OrderDetailsPresenter } from '../../presenters/order-details-presenter';
 import { ListingUserOrdersQuery } from '../../schemas/listing-user-orders-schema';
 import { ListingUserOrdersUseCase } from '@/domains/application/features/orders/use-cases/listing-user-orders-use-case';
 
@@ -19,7 +19,7 @@ export async function listingUserOrdersController(request: FastifyRequest, reply
 
 	const response = {
 		amount: result.value.amount,
-		orders: result.value.orders.map(OrderPresenter.toHTTP),
+		orders: result.value.orders.map(OrderDetailsPresenter.toHTTP),
 	};
 
 	return reply.status(200).send(response);
